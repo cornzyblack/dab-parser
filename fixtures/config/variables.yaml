@@ -1,7 +1,0 @@
-variables:
-  my_cluster_id:
-    description: The ID of an existing cluster.
-    default: 1234-567890-abcde123
-  my_notebook_path:
-    description: The path to an existing notebook.
-    default: ./hello.py
