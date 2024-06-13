@@ -3,3 +3,4 @@
 raw_scripts
 *.mypy_cache
 *.pyc
+algorithm.md
