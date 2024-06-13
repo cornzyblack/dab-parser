@@ -1,5 +1,5 @@
 import typer
-import utils
+import dab_parser.utils as utils
 from typing_extensions import Annotated
 from pathlib import Path
 from typing import Optional
@@ -12,14 +12,14 @@ def main(variables_file: Annotated[Optional[str], typer.Argument()] = None):
     option_str = '\n1 for Files\n2 for Directory\n'
     selected_option = typer.prompt(f"Please choose a sniff 🐕 pattern {option_str}", type=int)
 
-    while not (selected_option in options):
+    while (selected_option not in options):
         selected_option = typer.prompt(f"Please choose a sniff 🐕 pattern {option_str}", type=int)
 
     selected_value = options[selected_option]
     typer.echo(f"Selected option: {selected_value}")
 
     if selected_value.value == 1:
-        file_path_str = typer.prompt(f"Enter the file path", type=str)
+        file_path_str = typer.prompt("Enter the file path", type=str)
         # validate file path
         file_path = Path(file_path_str)
         if file_path.exists():
@@ -29,7 +29,7 @@ def main(variables_file: Annotated[Optional[str], typer.Argument()] = None):
 
     if selected_value.value == 2:
         # validate directory path
-        dir_path_str = typer.prompt(f"Enter the directory path for your files", type=str)
+        dir_path_str = typer.prompt("Enter the directory path for your files", type=str)
         dir_path = Path(dir_path_str)
         if dir_path.exists():
             print("Directory Path exists 🙂")

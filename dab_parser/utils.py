@@ -4,30 +4,31 @@ from typing import Optional
 from enum import IntEnum
 
 FILE_PATHS = list[Path]
-
+FILE_PATH = str|Path
+DIR_PATH = str|Path
 
 class Task:
     def __init__(self, task_file_path: Path| str, task_parameters: dict, job_parameters: Optional[dict] = None):
         self.task_file_path = task_file_path
         self.task_parameters = task_parameters
         self.job_parameters = job_parameters
-    
+
 class SniffPattern(IntEnum):
     FILE = 1
     DIR = 2
 
 # TODO: validate if file is a Databricks script
-    
-def get_parsed_file(file_path):
+
+def get_parsed_file(file_path: FILE_PATH):
     with open(file_path, "r") as file:
         tree = ast.parse(file.read(), filename=file_path)
     return tree
 
-def get_py_files_in_dir(dir_path: str) -> FILE_PATHS:
+def get_py_files_in_dir(dir_path: DIR_PATH) -> FILE_PATHS:
     """Get all python files in a directory
 
     Args:
-        dir_path (str): The full path of the directory
+        dir_path (DIR_PATH): The full path of the directory
 
     Returns:
         DIRECTORY_LIST: A list of directory paths
@@ -41,7 +42,7 @@ def sniff_task_parameters_from_dir(file_paths: FILE_PATHS) -> dict[Path, list]:
         parameter_script_mapping[file_path] = sniff_task_parameters_from_file(file_path)
     return parameter_script_mapping
 
-def sniff_task_parameters_from_file(file_path: str) -> list:
+def sniff_task_parameters_from_file(file_path: FILE_PATH) -> list:
     script_nodes = get_parsed_file(file_path)
     return find_dbutils_widgets_get_calls(script_nodes)
 
@@ -93,5 +94,3 @@ def find_dbutils_widgets_get_calls(node) -> list:
                             calls.append(arg.value)
 
     return calls
-
-
